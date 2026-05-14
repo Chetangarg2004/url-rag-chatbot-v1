@@ -4,16 +4,16 @@ from bs4 import BeautifulSoup
 def scrape_urls(urls):
     all_text = ""
 
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+
     for url in urls:
         try:
-            res = requests.get(url.strip())
-            soup = BeautifulSoup(res.content, "html.parser")
-
-            for tag in soup(["script", "style"]):
-                tag.decompose()
+            response = requests.get(url, headers=headers, timeout=10)
+            soup = BeautifulSoup(response.text, "html.parser")
 
             text = soup.get_text()
-            text = text.encode('utf-8', errors='ignore').decode('utf-8')
             all_text += text
 
         except Exception as e:
