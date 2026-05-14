@@ -1,14 +1,17 @@
-import streamlit as st
+import gradio as gr
 from src.rag import rag_chatbot
 
-st.title("RAG Chatbot")
+def chat(url, question):
+    return rag_chatbot(url, question)
 
-url = st.text_input("Enter URL")
-question = st.text_input("Ask Question")
+iface = gr.Interface(
+    fn=chat,
+    inputs=[
+        gr.Textbox(label="Enter URL"),
+        gr.Textbox(label="Ask Question")
+    ],
+    outputs="text",
+    title="RAG Chatbot"
+)
 
-if st.button("Generate Answer"):
-
-    answer = rag_chatbot(url, question)
-
-    st.write("### Response:")
-    st.success(answer)
+iface.launch()
